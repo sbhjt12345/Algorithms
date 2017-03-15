@@ -1,3 +1,5 @@
+import java.util.HashMap;
+import java.util.Map;
 
 public class DP {
 	
@@ -170,5 +172,23 @@ public class DP {
 	            }
 	        }
 	        return s.substring(pos[0],pos[1]+1);
+	    }
+	    
+	    /** 
+	     * find if there is a subarray with length>=2 and sum is multiple of k
+	     * **/
+	    
+	    public boolean checkSubarraySum(int[] nums, int k) {
+	        Map<Integer,Integer> map = new HashMap<>();
+	        map.put(0,-1);
+	        int runningsum = 0;
+	        for (int i=0;i<nums.length;i++){
+	           runningsum += nums[i];
+	           if (k!=0) runningsum %= k;
+	           //System.out.println(runningsum);
+	           if (map.containsKey(runningsum) && i-map.get(runningsum)>1) return true;
+	           if (!map.containsKey(runningsum)) map.put(runningsum,i);
+	        }
+	        return false;
 	    }
 }
