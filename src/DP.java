@@ -115,4 +115,60 @@ public class DP {
        }
        return dp[sum];
     }
+   
+   
+ //ugly number is the a number whose prime factor is only 2,3 and 5
+   //1,2,3,4,5,6,8,9,10,...
+   // given n, find nth ugly number
+   public int uglyNumber(int n){
+	   /**
+	    * idea:
+	    * ugly number is built on ugly number
+	    * For 2 : 1*2,2*2,3*2,4*2,5*2,...
+	    * For 3 : 1*3,2*3,3*3,4*3,5*3,....
+	    * For 5 : 1*5,2*5,3*5,4*5,5*5,....
+	    * So it is just like we have these three arrays,where
+	    * Array(factor) = [1*n matrix of ugly numbers] * factor
+	    * The only difficulty here is getting the matrix, since we can get new from old, we should apply this idea
+	    * **/
+	   int[] index = new int[3];
+	   int[] dp = new int[n];
+	   dp[0] =1;
+	   for (int i=1;i<n;i++){
+		   dp[i] = Math.min(2*dp[index[0]], Math.min(3*dp[index[1]], 5*dp[index[2]]));
+		   if (dp[i]==2*dp[index[0]]) index[0]++;
+		   if (dp[i]==3*dp[index[1]]) index[1]++;
+		   if (dp[i]==5*dp[index[2]]) index[2]++;
+	   }
+	   return dp[n-1];  
+   }
+   
+	    public String longestPalindrome(String s) {
+	        if (s.length()<=1) return s;
+	        int n = s.length();
+	        int max = 0;
+	        int[] pos = new int[2];
+	        boolean[][] dp = new boolean[n][n];
+	        for (int i=0;i<n;i++) dp[i][i] = true;
+	        for (int k=1;k<n;k++){
+	            for (int left=0;left+k<n;left++){
+	                int right = left+k;
+	                if (s.charAt(left)==s.charAt(right) && k==1){
+	                    dp[left][right]=true;
+	                    if (right-left+1>max){
+	                        max = right-left+1;
+	                        pos[0] = left;pos[1]=right;
+	                    }
+	                }
+	                else if (s.charAt(left)==s.charAt(right)){
+	                    dp[left][right] = dp[left+1][right-1];
+	                    if (dp[left][right] && right-left+1>max){
+	                        max = right-left+1;
+	                        pos[0] = left;pos[1]=right;
+	                    }
+	                }
+	            }
+	        }
+	        return s.substring(pos[0],pos[1]+1);
+	    }
 }
