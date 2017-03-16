@@ -191,4 +191,38 @@ public class DP {
 	        }
 	        return false;
 	    }
+	    
+	    /**
+	     * Given an array of number and two player, one can pick either head or tail of the arrays,
+	     * determine whether player 1 will win in the end.
+	     * 
+	     * Some much wiser solution is posted on leetcode, but this one comes from myself.
+	     * **/
+	    
+	    public boolean PredictTheWinner(int[] nums) {
+	        int n = nums.length;
+	        int[] sum = new int[nums.length];
+	        sum[0] = nums[0];
+	        for (int i=1;i<nums.length;i++){
+	            sum[i] = sum[i-1] + nums[i];
+	        }
+	        int[][] dp = new int[n][n];
+	        for (int i=0;i<n;i++) dp[i][i] = nums[i];
+	        for (int k=1;k<n;k++){
+	            for (int left=0;left+k<n;left++){
+	                int right = left+k;
+	                //System.out.println("left is now " + left + " and right is now " + right);
+	                if (k==1) dp[left][right] = Math.max(nums[left],nums[right]);
+	                else{
+	                    dp[left][right] = Math.max(nums[left]+sum[right]-sum[left]-dp[left+1][right],
+	                                               nums[right]+sum[right-1]-sum[left]+nums[left]-dp[left][right-1]);
+	                }
+	               // System.out.println("dp[left][right] is now " + dp[left][right]);
+	            }
+	        }
+	        //System.out.println(dp[0][n-1]);
+	        int res = dp[0][n-1]*2-sum[n-1];
+	        if (res>=0) return true;
+	        else return false;
+	    }
 }
