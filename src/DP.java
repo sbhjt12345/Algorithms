@@ -225,4 +225,21 @@ public class DP {
 	        if (res>=0) return true;
 	        else return false;
 	    }
+	    /**
+	     * given coins, count the fewest number of coins which add up to n
+	     * **/
+	    public int coinchange2(int[] arr, int n){
+	    	int[] dp = new int[n+1];
+	    	for (int i=1;i<n;i++) dp[i] = Integer.MAX_VALUE;
+	    	
+	    	for (int i=1;i<=n;i++){
+	    		for (int coin:arr){
+	    			if (coin<=i && dp[i-coin]!=Integer.MAX_VALUE){
+	    				dp[i] = Math.min(dp[i-coin]+1, dp[i]);
+	    			}
+	    		}
+	    	}
+	    	if (dp[n]==Integer.MAX_VALUE) return -1;
+	        else return dp[n];
+	    }
 }
