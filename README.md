@@ -27,3 +27,42 @@ public class Solution {
 }
 
 I think its just a kadane's algorithm.
+
+
+"
+public class Solution {
+    List<String> res = new ArrayList<>();
+    public List<String> findAllConcatenatedWordsInADict(String[] words) {
+        PriorityQueue<String> pq = new PriorityQueue<>(new Comparator<String>(){
+           public int compare(String s1, String s2){
+             return s1.length()-s2.length();  
+           } 
+        });
+        for (String w : words) pq.add(w);
+        //System.out.println(pq.peek());
+        List<String> list = new ArrayList<>();
+        list.add(pq.poll());
+        while (!pq.isEmpty()){
+            String target= pq.poll();
+            helper(target,list);
+        }
+        return res;
+    }
+    
+    public void helper(String target, List<String> list){
+        int n = target.length();
+        boolean[] dp = new boolean[n+1];
+        dp[n] = true;
+        for (int i=n-1;i>=0;i--){
+            for (int j=i+1;j<=n;j++){
+                    dp[i] = dp[i] || (dp[j] && list.contains(target.substring(i,j)));
+            }
+        }
+        if (dp[0]) res.add(target);
+        list.add(target);
+    }
+}
+
+
+"
+
