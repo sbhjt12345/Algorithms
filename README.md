@@ -66,3 +66,43 @@ public class Solution {
 
 "
 
+
+Backtracking:
+
+/**
+* why this problem takes so long:
+* 1. forgot to put res as global
+* 2. when firsting doing it, only counting if array starts with i would make a valid array, thus only plus 1 at a time
+*   e.g. countArrangement(15) = 15 or sth like that
+* 3. just practice.... 
+
+**/
+  
+public class Solution {
+    int res = 0;
+    
+    public int countArrangement(int N) {
+        List<Integer> cache = new ArrayList<>();
+        for (int i=1;i<=N;i++) cache.add(i);
+        for (int i=0;i<cache.size();i++) helper(i,cache,0);
+        return res;
+    }
+    
+    public void helper(int num, List<Integer> cache, int idx){
+        int cur = cache.get(num);
+        if (cur % (idx+1)==0 || (idx+1)%cur==0){
+            cache.remove(num);
+            if (cache.size()==0){
+                res++;
+                cache.add(num,cur);
+                return;
+            }
+            else{
+               for (int j=0;j<cache.size();j++){
+                helper(j,cache,idx+1);
+               } 
+            }
+            cache.add(num,cur);
+        }
+    }
+}
