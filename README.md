@@ -106,3 +106,41 @@ public class Solution {
         }
     }
 }
+
+
+//////////////////////////////////////////find leaves of a binary tree ////////////////////////////////////////////////
+public class Solution {
+    public List<List<Integer>> findLeaves(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root==null) return res;
+        List<Integer> lres = new ArrayList<>(root.val);
+        if (root.left==null && root.right==null){
+            res.add(lres);
+            return res;
+        }
+        List<List<Integer>> left = findLeaves(root.left);
+        List<List<Integer>> right = findLeaves(root.right);
+        int i = left.size()-1, j=right.size()-1;
+        while (i>=0 && j>=0){
+            List<Integer> leftLeaves = left.get(i);
+            List<Integer> rightLeaves = right.get(j);
+            leftLeaves.addAll(rightLeaves);
+            res.add(leftLeaves);
+            i--;j--;
+        }
+        if (i>=0) {
+            while (i>=0){
+                res.add(leftLeaves);
+                i--;
+            }
+        }
+        if (j>=0){
+            while (j>=0){
+                res.add(rightLeaves);
+                j--;
+            }
+        }
+        res.add(lres);
+        return res;
+    }
+}
