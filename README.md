@@ -144,3 +144,58 @@ public class Solution {
         return res;
     }
 }
+
+
+------------------------------------------------------------------------------------------------------------
+Maze (leetcode)
+
+//few problems: 
+// 1. when first doing this, i changed every cell in the board I walked to 2. But I defined if there is a 2 in the way
+// we just stop there. This blocks our way to the destination.
+// 2. So I then changed to only changing the cell we stopped due to reaching a wall/boundary to 2. This is correct logic, not working
+// only because in the loop of helper function, I did not check if we had been that cell before, which gives stackoverflow.
+
+     public class Solution {
+    int[][] dirs = {{-1,0},{1,0},{0,1},{0,-1}};  //up,down,right,left
+    boolean res = false;
+    int[][] copy;
+    public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+        //dfs, get all the path possible, 
+        if (maze==null || maze.length==0) return false;
+        int m = maze.length, n = maze[0].length;
+        maze[start[0]][start[1]] = 2;
+        for (int[] dir : dirs){
+            if (res) return res;
+            int i = start[0] + dir[0];
+            int j = start[1] + dir[1];
+            if (i>=0 && j>=0 && i<m && j<n && maze[i][j]==0){
+                helper(maze,destination,i,j,m,n,dir[0],dir[1]);
+            }
+        }
+        return res;
+    }
+    
+    public void helper(int[][] maze, int[] des,int row, int col,int m, int n,int ud,int lr){
+        while (row+ud>=0 && row+ud<m && col+lr>=0 && col+lr<n && maze[row+ud][col+lr]!=1){
+            row += ud;
+            col += lr;
+        }
+        if (row==des[0] && col==des[1]) {
+            res = true;
+            return;
+        }
+        else{
+            if (maze[row][col]==0){
+                maze[row][col] = 2;
+                for (int[] dir : dirs){
+                    int i = row + dir[0];
+                    int j=  col + dir[1];
+                    if (i>=0 && j>=0 && i<m && j<n && maze[i][j]==0){
+                        helper(maze,des,i,j,m,n,dir[0],dir[1]);
+                     }
+                }
+            }
+            
+        }
+    }
+}
