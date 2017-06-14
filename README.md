@@ -199,3 +199,60 @@ Maze (leetcode)
         }
     }
 }
+
+// backtracking : N queens 
+public class Solution {
+    int[][] dirs = {{-1,-1},{-1,1}};
+    //constraint1:make sure no attack
+    //cons2:finally gets n queens in the board
+    public List<List<String>> solveNQueens(int n) {
+        StringBuffer sb = new StringBuffer();
+        for (int i=0;i<n;i++){
+            sb.append('.');
+        }
+        List<List<String>> res = new ArrayList<>();
+        for (int i=0;i<n;i++){
+            List<String> temp = new ArrayList<>();
+            String s = change(new String(sb),i);
+            temp.add(s);
+            backtrack(res,temp,n-1,n,new String(sb));
+        }
+        return res;
+    }
+    
+    public void backtrack(List<List<String>> res, List<String> temp, int count,int n,String sb){
+        if (count==0){
+            res.add(new ArrayList<String>(temp));
+            return;
+        }
+        
+        for (int i=0;i<n;i++){
+            String ss = change(sb,i);
+            int size = temp.size();
+            if (noattack(temp,size,i,n)){
+                temp.add(ss);
+                backtrack(res,temp,count-1,n,sb);
+                temp.remove(temp.size()-1);
+            }
+        }
+    }
+    
+    public boolean noattack(List<String> temp, int row, int col, int n){
+        for (int i=0;i<temp.size();i++){
+            if (temp.get(i).charAt(col)=='Q') return false;
+        }
+        for (int[] dir : dirs){
+            int a = dir[0], b = dir[1], tmprow = row+a, tmpcol = col+b;
+            while (tmprow>=0 && tmprow<n && tmpcol>=0 && tmpcol<n){
+                if (temp.get(tmprow).charAt(tmpcol)=='Q') return false;
+                tmprow += a;
+                tmpcol += b;
+            }
+        }
+        return true;
+    }
+    
+    public String change(String ori, int pos){
+        return ori.substring(0,pos)+'Q'+ori.substring(pos+1);
+    }
+}
